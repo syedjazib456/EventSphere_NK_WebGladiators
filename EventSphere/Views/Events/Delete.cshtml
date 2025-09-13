@@ -1,0 +1,12 @@
+﻿@model EventSphere.Models.Event
+
+<div class="card shadow p-4">
+    <h3 class="text-danger">⚠ Delete Event</h3>
+    <p>Are you sure you want to delete the event <strong>@Model.Title</strong> scheduled on <strong>@Model.Date.ToString("dd MMM yyyy")</strong>?</p>
+
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="EventId" />
+        <button type="submit" class="btn btn-danger">🗑 Yes, Delete</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

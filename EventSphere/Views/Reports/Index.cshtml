@@ -1,0 +1,31 @@
+﻿@model IEnumerable<dynamic>
+
+<h2 class="mb-4">📊 Reports</h2>
+
+<table class="table table-striped shadow-sm">
+    <thead class="table-dark">
+        <tr>
+            <th>Event</th>
+            <th>Date</th>
+            <th>Registered</th>
+            <th>Present</th>
+            <th>Attendance %</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            var percent = r.TotalRegistered > 0
+            ? (int)((double)r.TotalPresent / r.TotalRegistered * 100)
+            : 0;
+
+            <tr>
+                <td>@r.Title</td>
+                <td>@r.Date.ToString("dd MMM yyyy")</td>
+                <td>@r.TotalRegistered</td>
+                <td>@r.TotalPresent</td>
+                <td><span class="badge bg-primary">@percent %</span></td>
+            </tr>
+        }
+    </tbody>
+</table>

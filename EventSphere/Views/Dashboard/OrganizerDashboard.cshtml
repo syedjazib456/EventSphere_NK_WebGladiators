@@ -1,0 +1,239 @@
+﻿@{
+    ViewData["Title"] = "Organizer Dashboard";
+}
+
+<!-- Dashboard Header -->
+<div class="mb-5 text-center">
+    <h1 class="fw-bold display-5">🎤 Organizer Dashboard</h1>
+    <p class="text-muted">Track your events, attendance & manage everything from one place.</p>
+</div>
+
+<!-- Quick Stats -->
+<div class="row g-4 mb-5">
+    <div class="col-md-3">
+        <div class="card text-center shadow-lg border-0 stat-card bg-gradient-primary text-white">
+            <div class="card-body">
+                <i class="fas fa-calendar-alt fa-2x mb-2"></i>
+                <h6 class="card-title text-uppercase">Total Events</h6>
+                <h2>@ViewBag.TotalEvents</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center shadow-lg border-0 stat-card bg-gradient-success text-white">
+            <div class="card-body">
+                <i class="fas fa-hourglass-start fa-2x mb-2"></i>
+                <h6 class="card-title text-uppercase">Upcoming</h6>
+                <h2>@ViewBag.UpcomingCount</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center shadow-lg border-0 stat-card bg-gradient-danger text-white">
+            <div class="card-body">
+                <i class="fas fa-history fa-2x mb-2"></i>
+                <h6 class="card-title text-uppercase">Past</h6>
+                <h2>@ViewBag.PastCount</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center shadow-lg border-0 stat-card bg-gradient-warning text-dark">
+            <div class="card-body">
+                <i class="fas fa-chart-line fa-2x mb-2"></i>
+                <h6 class="card-title text-uppercase">Attendance Rate</h6>
+                <h2>@ViewBag.AttendanceRate %</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="row g-4 mb-5">
+    <div class="col-md-6">
+        <div class="card shadow border-0 h-100">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">📊 Events Distribution</h5>
+                <canvas id="eventsPie" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow border-0 h-100">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">📈 Attendance Rate per Event</h5>
+                <canvas id="attendanceBar" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card shadow text-center border-0 hover-card">
+            <div class="card-body">
+                <i class="fas fa-calendar-check fa-2x text-primary mb-2"></i>
+                <h5 class="fw-bold">My Events</h5>
+                <p class="text-muted">View and manage your events.</p>
+                <a asp-controller="Events" asp-action="Index" class="btn btn-outline-primary">Go</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow text-center border-0 hover-card">
+            <div class="card-body">
+                <i class="fas fa-plus-circle fa-2x text-success mb-2"></i>
+                <h5 class="fw-bold">Create Event</h5>
+                <p class="text-muted">Add a new event quickly.</p>
+                <a asp-controller="Events" asp-action="Create" class="btn btn-success">Create</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow text-center border-0 hover-card">
+            <div class="card-body">
+                <i class="fas fa-photo-video fa-2x text-info mb-2"></i>
+                <h5 class="fw-bold">Media</h5>
+                <p class="text-muted">Upload event photos & media.</p>
+                <a asp-controller="MediaGallery" asp-action="Index" class="btn btn-info">Open</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upcoming Events -->
+<div class="card shadow border-0 mb-4">
+    <div class="card-body">
+        <h4 class="fw-bold mb-3">📅 Upcoming Events</h4>
+        @if (ViewBag.UpcomingEvents != null && ((List<EventSphere.Models.Event>)ViewBag.UpcomingEvents).Any())
+        {
+            <ul class="list-group list-group-flush">
+                @foreach (var e in (List<EventSphere.Models.Event>)ViewBag.UpcomingEvents)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>@e.Title</strong><br />
+                            <small class="text-muted">@e.Date.ToString("dd MMM yyyy") — @e.Venue</small>
+                        </div>
+                        <a asp-controller="Events" asp-action="Details" asp-route-id="@e.EventId"
+                           class="btn btn-sm btn-outline-primary">View</a>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">No upcoming events scheduled.</p>
+        }
+    </div>
+</div>
+
+<!-- Past Events -->
+<div class="card shadow border-0">
+    <div class="card-body">
+        <h4 class="fw-bold mb-3">📜 Past Events</h4>
+        @if (ViewBag.PastEvents != null && ((List<EventSphere.Models.Event>)ViewBag.PastEvents).Any())
+        {
+            <ul class="list-group list-group-flush">
+                @foreach (var e in (List<EventSphere.Models.Event>)ViewBag.PastEvents)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>@e.Title</strong><br />
+                            <small class="text-muted">@e.Date.ToString("dd MMM yyyy") — @e.Venue</small>
+                        </div>
+                        <div class="btn-group">
+                            <a asp-controller="Events" asp-action="Details" asp-route-id="@e.EventId"
+                               class="btn btn-sm btn-outline-secondary">View</a>
+                            <a asp-controller="Attendance" asp-action="GetAttendanceList" asp-route-eventId="@e.EventId"
+                               class="btn btn-sm btn-outline-success">Attendance</a>
+                            <a asp-controller="MediaGallery" asp-action="Index" asp-route-eventId="@e.EventId"
+                               class="btn btn-sm btn-outline-info">Media</a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">No past events found.</p>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctxPie = document.getElementById('eventsPie');
+        new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: ['Upcoming Events', 'Past Events'],
+                datasets: [{
+                    data: [@ViewBag.UpcomingCount, @ViewBag.PastCount],
+                    backgroundColor: ['#36A2EB', '#FF6384']
+                }]
+            }
+        });
+
+        const ctxBar = document.getElementById('attendanceBar');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                                    ((IEnumerable<dynamic>)ViewBag.AttendanceStats).Select(a => a.GetType().GetProperty("Title")?.GetValue(a))
+                            )),
+            datasets: [{
+                label: 'Attendance %',
+                data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                                        ((IEnumerable<dynamic>)ViewBag.AttendanceStats).Select(a => a.GetType().GetProperty("Percent")?.GetValue(a))
+                                )),
+                backgroundColor: '#4CAF50'
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true, max: 100 }
+            }
+        }
+    });
+</script>
+}
+
+<style>
+    .stat-card {
+        border-radius: 15px;
+        transition: transform 0.3s ease;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #6C63FF, #4E54C8);
+    }
+
+    .bg-gradient-success {
+        background: linear-gradient(135deg, #28a745, #218838);
+    }
+
+    .bg-gradient-danger {
+        background: linear-gradient(135deg, #ff4b5c, #c9184a);
+    }
+
+    .bg-gradient-warning {
+        background: linear-gradient(135deg, #f6d365, #fda085);
+    }
+
+    .hover-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+        border-radius: 15px;
+    }
+
+        .hover-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+</style>

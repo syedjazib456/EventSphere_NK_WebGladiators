@@ -1,0 +1,63 @@
+﻿@model EventSphere.Models.ViewModels.RegisterViewModel
+
+<div class="register-wrapper d-flex align-items-center justify-content-center" style="min-height:100vh; background: linear-gradient(135deg, #FF6584, #6C63FF);">
+    <div class="register-card bg-white p-5 rounded-4 shadow-lg" style="max-width:500px; width:100%;">
+
+        <h2 class="text-center fw-bold mb-3" style="color:#333;">Create Your Account</h2>
+        <p class="text-center text-muted mb-4" style="font-size:0.95rem;">
+            Join EventSphere and participate in amazing college events.
+        </p>
+
+        <form asp-action="Register" method="post">
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label fw-semibold">Full Name</label>
+                <input asp-for="FullName" class="form-control form-control-lg" style="border-radius:50px; padding:12px;" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label fw-semibold">Email</label>
+                <input asp-for="Email" class="form-control form-control-lg" style="border-radius:50px; padding:12px;" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Department" class="form-label fw-semibold">Department</label>
+                <input asp-for="Department" class="form-control form-control-lg" style="border-radius:50px; padding:12px;" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Mobile" class="form-label fw-semibold">Mobile</label>
+                <input asp-for="Mobile" class="form-control form-control-lg" style="border-radius:50px; padding:12px;" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="EnrollmentNo" class="form-label fw-semibold">Enrollment No</label>
+                <input asp-for="EnrollmentNo" class="form-control form-control-lg" style="border-radius:50px; padding:12px;" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label fw-semibold">Password</label>
+                <input asp-for="Password" type="password" class="form-control form-control-lg" style="border-radius:50px; padding:12px;" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ConfirmPassword" class="form-label fw-semibold">Confirm Password</label>
+                <input asp-for="ConfirmPassword" type="password" class="form-control form-control-lg" style="border-radius:50px; padding:12px;" />
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Role" class="form-label fw-semibold">Role</label>
+                <select asp-for="Role" class="form-select form-select-lg" asp-items="Html.GetEnumSelectList<UserRole>()" style="border-radius:50px; padding:12px;"></select>
+            </div>
+
+            <button type="submit" class="btn btn-gradient w-100 fw-bold mb-3" style="padding:12px; border-radius:50px; font-size:1rem;">
+                Register
+            </button>
+        </form>
+
+        <p class="text-center text-muted" style="font-size:0.9rem;">
+            Already have an account?
+            <a href="Login" style="color:#6C63FF; text-decoration:none;">Login</a>
+        </p>
+    </div>
+</div>
+

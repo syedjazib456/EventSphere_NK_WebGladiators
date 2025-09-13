@@ -1,0 +1,30 @@
+﻿@model IEnumerable<EventSphere.Models.Registration>
+
+<h2>My Registrations</h2>
+
+@if (!Model.Any())
+{
+    <p>No registrations found.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <tr>
+            <th>Event</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>QR Code</th>
+        </tr>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.Event.Title</td>
+                <td>@r.Event.Date.ToShortDateString()</td>
+                <td>@r.Status</td>
+                <td>
+                    <img src="@Url.Action("QrCode", "Registration", new { value = r.QrCodeValue })" width="120" />
+                </td>
+            </tr>
+        }
+    </table>
+}
